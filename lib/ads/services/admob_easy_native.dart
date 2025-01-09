@@ -53,7 +53,7 @@ class AdmobEasyNative extends StatefulWidget {
   /// Called when the ad receives a paid event.
   final void Function(Ad, double, PrecisionType, String)? onPaidEvent;
 
-  final NativeTemplateStyle templateType;
+  final NativeTemplateStyle? templateType;
 
   /// A small template for the native ad.
   const AdmobEasyNative.smallTemplate({
@@ -61,7 +61,7 @@ class AdmobEasyNative extends StatefulWidget {
     this.minHeight = 90,
     this.maxWidth = 400,
     this.maxHeight = 200,
-    this.templateType = NativeTemplateStyle(templateType: TemplateType.small),
+    this.templateType,
     super.key,
     this.onAdClicked,
     this.onAdClosed,
@@ -77,7 +77,7 @@ class AdmobEasyNative extends StatefulWidget {
     this.minHeight = 320,
     this.maxWidth = 400,
     this.maxHeight = 400,
-    this.templateType = NativeTemplateStyle(templateType: TemplateType.medium),
+    this.templateType,
     super.key,
     this.onAdClicked,
     this.onAdClosed,
