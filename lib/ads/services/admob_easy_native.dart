@@ -53,7 +53,7 @@ class AdmobEasyNative extends StatefulWidget {
   /// Called when the ad receives a paid event.
   final void Function(Ad, double, PrecisionType, String)? onPaidEvent;
 
-  final TemplateType templateType;
+  final NativeTemplateStyle templateType;
 
   /// A small template for the native ad.
   const AdmobEasyNative.smallTemplate({
@@ -61,7 +61,7 @@ class AdmobEasyNative extends StatefulWidget {
     this.minHeight = 90,
     this.maxWidth = 400,
     this.maxHeight = 200,
-    this.templateType = TemplateType.small,
+    this.templateType = NativeTemplateStyle(templateType: TemplateType.small),
     super.key,
     this.onAdClicked,
     this.onAdClosed,
@@ -77,7 +77,7 @@ class AdmobEasyNative extends StatefulWidget {
     this.minHeight = 320,
     this.maxWidth = 400,
     this.maxHeight = 400,
-    this.templateType = TemplateType.medium,
+    this.templateType = NativeTemplateStyle(templateType: TemplateType.medium),
     super.key,
     this.onAdClicked,
     this.onAdClosed,
@@ -97,8 +97,7 @@ class _AdmobEasyNativeState extends State<AdmobEasyNative> {
 
   /// Initializes the native ad.
   Future<void> _init() async {
-    if (!AdmobEasy.instance.isConnected.value ||
-        AdmobEasy.instance.nativeAdID.isEmpty) {
+    if (!AdmobEasy.instance.isConnected.value || AdmobEasy.instance.nativeAdID.isEmpty) {
       AdmobEasyLogger.error('Admob not connected or ad unit ID is empty');
       _nativeAdIsLoaded.value = false;
       return;
@@ -130,9 +129,7 @@ class _AdmobEasyNativeState extends State<AdmobEasyNative> {
         onPaidEvent: widget.onPaidEvent,
       ),
       request: const AdRequest(),
-      nativeTemplateStyle: NativeTemplateStyle(
-        templateType: widget.templateType,
-      ),
+      nativeTemplateStyle: widget.templateType,
     );
 
     ad.load();
