@@ -56,8 +56,7 @@ class _AdMobEasyBannerState extends State<AdMobEasyBanner> {
   }
 
   Future<void> _init() async {
-    if (!AdmobEasy.instance.isConnected.value ||
-        AdmobEasy.instance.bannerAdID.isEmpty) {
+    if (!AdmobEasy.instance.isConnected.value || AdmobEasy.instance.bannerAdID.isEmpty) {
       AdmobEasyLogger.error('Banner ad cannot load');
       _isAdLoading.value = false; // Set loading to false if ad cannot load
       return;
@@ -73,9 +72,7 @@ class _AdMobEasyBannerState extends State<AdMobEasyBanner> {
     _admobBannerAd = BannerAd(
       adUnitId: AdmobEasy.instance.bannerAdID,
       request: AdRequest(
-        extras: widget.isCollapsible
-            ? {"collapsible": widget.collapseGravity.name}
-            : null,
+        extras: widget.isCollapsible ? {"collapsible": widget.collapseGravity.name} : null,
       ),
       size: widget.adSize,
       listener: BannerAdListener(
@@ -111,40 +108,7 @@ class _AdMobEasyBannerState extends State<AdMobEasyBanner> {
     return ValueListenableBuilder<bool>(
       valueListenable: _isAdLoading,
       builder: (context, isAdLoading, child) {
-        if (isAdLoading) {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              width: widget.adSize.width.toDouble(),
-              height: widget.adSize.height.toDouble(),
-              color: Colors.white,
-              alignment: Alignment.topLeft,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Color(0xFFE88F1A),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(12),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 4,
-                  ),
-                  child: Text(
-                    'Ad',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
+        if (isAdLoading) return SizedBox.shrink();
 
         if (_admobBannerAd == null) {
           // Return empty container if ad failed to load and is not available
