@@ -42,11 +42,7 @@ mixin OpenAppAd {
   int _numAppOpenAdLoadAttempts = 0;
 
   /// <------------------------ Load AppOpenAd with Exponential Backoff ------------------------>
-  void loadAppOpenAd({
-    int maxLoadAttempts = 5,
-    int attemptDelayFactorMs = 500,
-    String? adId,
-  }) {
+  void loadAppOpenAd({int maxLoadAttempts = 5, int attemptDelayFactorMs = 500, String? adId}) {
     final instance = AdmobEasy.instance;
     final appOpenAdID = adId ?? instance.appOpenAdID;
     if (appOpenAdID.isEmpty || _isShowingAd) return;
@@ -89,7 +85,10 @@ mixin OpenAppAd {
   }
 
   /// <------------------------ Show AppOpenAd ------------------------>
-  void showOpenAppAd() {
+  void showOpenAppAd(
+    void Function(OpenAppAd)? onAdDismissedFullScreenContent,
+    void Function(OpenAppAd)? onAdFailedToShowFullScreenContent,
+  ) {
     if (_appOpenAd == null || _isShowingAd) {
       loadAppOpenAd(); // Load an ad if none is available or already showing
       return;
@@ -108,6 +107,7 @@ mixin OpenAppAd {
         ad.dispose();
         _appOpenAd = null;
         loadAppOpenAd(); // Load a new ad after failure
+        onAdFailedToShowFullScreenContent?.call(ad);
       },
       onAdDismissedFullScreenContent: (ad) {
         AdmobEasyLogger.info('$ad dismissed');
@@ -115,6 +115,7 @@ mixin OpenAppAd {
         ad.dispose();
         _appOpenAd = null;
         loadAppOpenAd(); // Preload a new ad after dismissal
+        onAdDismissedFullScreenContent?.call(ad);
       },
     );
 
@@ -132,8 +133,7 @@ class AppLifecycleReactor {
   /// <------------------------ Start Listening for App State Changes ------------------------>
   void openAppAdListener() {
     AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream
-        .forEach((state) => _onAppStateChanged(state));
+    AppStateEventNotifier.appStateStream.forEach((state) => _onAppStateChanged(state));
   }
 
   /// <------------------------ Handle App State Changes ------------------------>
