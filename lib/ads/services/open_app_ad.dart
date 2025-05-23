@@ -86,8 +86,8 @@ mixin OpenAppAd {
 
   /// <------------------------ Show AppOpenAd ------------------------>
   void showOpenAppAd({
-    void Function(OpenAppAd)? onAdDismissedFullScreenContent,
-    void Function(OpenAppAd)? onAdFailedToShowFullScreenContent,
+    void Function(AppOpenAd)? onAdDismissedFullScreenContent,
+    void Function(AppOpenAd)? onAdFailedToShowFullScreenContent,
   }) {
     if (_appOpenAd == null || _isShowingAd) {
       loadAppOpenAd(); // Load an ad if none is available or already showing
